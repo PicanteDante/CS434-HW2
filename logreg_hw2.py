@@ -135,25 +135,25 @@ def calculateNegativeLogLikelihood(X,y,w):
 ######################################################################
 def trainLogistic(X,y, max_iters=2000, step_size=0.0001):
 
-    # Initialize our weights with zeros
-    w = np.zeros( (X.shape[1],1) )
-    
-    # Keep track of losses for plotting
-    losses = [calculateNegativeLogLikelihood(X,y,w)]
-    
-    # Take up to max_iters steps of gradient descent
-    for i in range(max_iters):
-    
-               
-        # Todo: Compute the gradient over the dataset and store in w_grad
-        # .
-        # . Implement equation 9.
-        # .
-     
+	# Initialize our weights with zeros
+	w = np.zeros( (X.shape[1],1) )
 
-        # This is here to make sure your gradient is the right shape
-        assert(w_grad.shape == (X.shape[1],1))
-		
+	# Keep track of losses for plotting
+	losses = [calculateNegativeLogLikelihood(X,y,w)]
+
+	# Take up to max_iters steps of gradient descent
+	for i in range(max_iters):
+
+			   
+		# Todo: Compute the gradient over the dataset and store in w_grad
+		# .
+		# . Implement equation 9.
+		# .
+
+
+		# This is here to make sure your gradient is the right shape
+		assert(w_grad.shape == (X.shape[1],1))
+
 		for j in range(X.shape[0]):
             # Calculate the predicted probability
             p = sigmoid(np.dot(X[j], w))
@@ -161,14 +161,14 @@ def trainLogistic(X,y, max_iters=2000, step_size=0.0001):
             w_grad += X[j].reshape(-1, 1) * (p - y[j])
 		
 		
-        # Take the update step in gradient descent
-        w = w - step_size*w_grad
-        
-        # Calculate the negative log-likelihood with the 
-        # new weight vector and store it for plotting later
-        losses.append(calculateNegativeLogLikelihood(X,y,w))
-        
-    return w, losses
+		# Take the update step in gradient descent
+		w = w - step_size*w_grad
+
+		# Calculate the negative log-likelihood with the
+		# new weight vector and store it for plotting later
+		losses.append(calculateNegativeLogLikelihood(X,y,w))
+
+	return w, losses
 
 
 ######################################################################
