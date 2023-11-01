@@ -155,10 +155,10 @@ def trainLogistic(X,y, max_iters=2000, step_size=0.0001):
 		assert(w_grad.shape == (X.shape[1],1))
 
 		for j in range(X.shape[0]):
-            # Calculate the predicted probability
-            p = sigmoid(np.dot(X[j], w))
-            # Calculate the gradient for this example
-            w_grad += X[j].reshape(-1, 1) * (p - y[j])
+			# Calculate the predicted probability
+			p = sigmoid(np.dot(X[j], w))
+			# Calculate the gradient for this example
+			w_grad += X[j].reshape(-1, 1) * (p - y[j])
 		
 		
 		# Take the update step in gradient descent
