@@ -30,16 +30,17 @@ def main():
 	logging.info("\n---------------------------------------------------------------------------\n")
 
 	X_train_bias = dummyAugment(X_train)
+	X_test_bias = dummyAugment(X_test)
 
 	# Fit a logistic regression model on train and plot its losses
 	logging.info("Training logistic regression model (Added Bias Term)")
-	w, bias_losses = trainLogistic(X_train_bias,y_train)
-	y_pred_train = X_train_bias@w >= 0
+	bias_w, bias_losses = trainLogistic(X_train_bias,y_train)
+	y_pred_train = X_train_bias@bias_w >= 0
 
-	logging.info("Learned weight vector: {}".format([np.round(a,4)[0] for a in w]))
+	logging.info("Learned weight vector: {}".format([np.round(a,4)[0] for a in bias_w]))
 	logging.info("Train accuracy: {:.4}%".format(np.mean(y_pred_train == y_train)*100))
 
-
+	"""
 	plt.figure(figsize=(16,9))
 	plt.plot(range(len(losses)), losses, label="No Bias Term Added")
 	plt.plot(range(len(bias_losses)), bias_losses, label="Bias Term Added")
@@ -47,26 +48,29 @@ def main():
 	plt.xlabel("Epoch")
 	plt.ylabel("Negative Log Likelihood")
 	plt.legend()
-	plt.show()
+	plt.show()"""
 
 	logging.info("\n---------------------------------------------------------------------------\n")
 
 	logging.info("Running cross-fold validation for bias case:")
-
+	
 	# Perform k-fold cross
 	for k in [2,3,4, 5, 10, 20, 50]:
 		cv_acc, cv_std = kFoldCrossVal(X_train_bias, y_train, k)
 		logging.info("{}-fold Cross Val Accuracy -- Mean (stdev): {:.4}% ({:.4}%)".format(k,cv_acc*100, cv_std*100))
-
+	
 	####################################################
 	# Write the code to make your test submission here
 	####################################################
 	
-	test_out = np.concatenate((np.expand_dims(np.array(range(X.shape[0]),dtype=int), axis=1), pred_test_y), axis=1)
-	header = np.array([["id", "income"]])
+	
+	#	Actually make predictions
+	pred_test_y = predict(X_test_bias, bias_w, 0.5)
+	
+	test_out = np.concatenate((np.expand_dims(np.array(range(pred_test_y.shape[0]),dtype=int), axis=1), pred_test_y), axis=1)
+	header = np.array([["id", "type"]])
 	test_out = np.concatenate((header, test_out))
 	np.savetxt('test_predicted.csv', test_out, fmt='%s', delimiter=',')
-	raise Exception('Student error: You haven\'t implemented the code in main() to make test predictions.')
 
 
 
@@ -229,6 +233,17 @@ def kFoldCrossVal(X, y, k):
 
   return np.mean(acc), np.std(acc)
 
+
+def predict(X_test, w, t):
+    # Calculate the predicted probabilities
+    probabilities = logistic(X_test @ w)
+    
+    # Classify data points as 0 or 1 based on a threshold (e.g., 0.5)
+    # You can adjust the threshold based on your specific problem
+    predictions = (probabilities >= t).astype(int)
+    
+    return predictions
+    #return np.array(predicted_y,dtype=int)[:,np.newaxis]
 
 # Loads the train and test splits, passes back x/y for train and just x for test
 def loadData():
