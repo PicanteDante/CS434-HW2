@@ -46,14 +46,31 @@ def main():
 	
 	X_train_bias = dummyAugment(X_train)
 	X_test_bias = dummyAugment(X_test)
-
+	sizes = []
+	accuracies = []
+	weights = []
+	lossess = []
+	
 	# Fit a logistic regression model on train and plot its losses
 	logging.info("Training logistic regression model (Added Bias Term)")
-	bias_w, bias_losses = trainLogistic(X_train_bias,y_train)
-	y_pred_train = X_train_bias@bias_w >= 0
-
-	logging.info("Learned weight vector: {}".format([np.round(a,4)[0] for a in bias_w]))
-	logging.info("Train accuracy: {:.4}%".format(np.mean(y_pred_train == y_train)*100))
+	for i in range(3001):
+		ss = i * 0.00001
+		
+		#bias_w, bias_losses = trainLogistic(X_train_bias,y_train)
+		#y_pred_train = X_train_bias@bias_w >= 0
+		sizes.append(ss)
+		
+		bias_w, bias_losses = trainLogistic(X_train_bias,y_train, step_size=ss)
+		y_pred_train = X_train_bias@bias_w >= 0
+		
+		weights.append(bias_w)
+		lossess.append(bias_losses)
+		accuracies.append(np.mean(y_pred_train == y_train)*100)
+		
+		#print("StepSize: {:.4f}\tAccuracy: {:.4f}%\tWeights: {}".format(ss, accuracies[i], bias_w))
+		
+		#logging.info("Learned weight vector: {}".format([np.round(a,4)[0] for a in bias_w]))
+		#logging.info("Train accuracy: {:.4}%".format(np.mean(y_pred_train == y_train)*100))
 	
 	'''
 	# Fit a logistic regression model on train and plot its losses
@@ -64,9 +81,16 @@ def main():
 	logging.info("Learned weight vector: {}".format([np.round(a,4)[0] for a in bias_w2]))
 	logging.info("Train accuracy: {:.4}%".format(np.mean(y_pred_train == y_train)*100))'''
 
-
-
-	logging.info(bias_losses[len(bias_losses) - 1])
+	plt.figure(figsize=(16,7))
+	plt.plot(sizes,accuracies)
+	plt.xlabel("step_size")
+	plt.ylabel("accuracy")
+	plt.show()
+	
+	test_out = np.concatenate()
+	header = np.array([["id", "type"]])
+	test_out = np.concatenate((header, test_out))
+	np.savetxt('test_predicted.csv', test_out, fmt='%s', delimiter=',')
 
 	'''
 	plt.figure(figsize=(16,7))
@@ -84,11 +108,11 @@ def main():
 	logging.info("Running cross-fold validation for bias case:")
 	
 	# Perform k-fold cross
-	
+	'''
 	for k in [2,3,4, 5, 10, 20, 50]:
 		cv_acc, cv_std = kFoldCrossVal(X_train_bias, y_train, k)
 		logging.info("{}-fold Cross Val Accuracy -- Mean (stdev): {:.4}% ({:.4}%)".format(k,cv_acc*100, cv_std*100))
-	
+	'''
 	####################################################
 	# Write the code to make your test submission here
 	####################################################
@@ -176,7 +200,7 @@ def calculateNegativeLogLikelihood(X,y,w):
 #
 #   losses -- a list of negative log-likelihood values for each iteration
 ######################################################################
-def trainLogistic(X,y, max_iters=15000, step_size=0.00225):
+def trainLogistic(X,y, max_iters=20000, step_size=0.002):
 	# Initialize our weights with zeros
 	w = np.zeros( (X.shape[1],1) )
 
