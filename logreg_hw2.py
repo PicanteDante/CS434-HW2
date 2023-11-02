@@ -3,12 +3,6 @@ Things I changed:
 step_size = 0.002 | 0.0025
 max_iters = 20000
 dummy_aug = column of 1s
-
-
-
-
-
-
 """
 
 
@@ -67,7 +61,7 @@ def main():
 		lossess.append(bias_losses)
 		accuracies.append(np.mean(y_pred_train == y_train)*100)
 		
-		#print("StepSize: {:.4f}\tAccuracy: {:.4f}%\tWeights: {}".format(ss, accuracies[i], bias_w))
+		print("StepSize: {:.4f}\tAccuracy: {:.4f}%\tWeights: {}".format(ss, accuracies[i], bias_w))
 		
 		#logging.info("Learned weight vector: {}".format([np.round(a,4)[0] for a in bias_w]))
 		#logging.info("Train accuracy: {:.4}%".format(np.mean(y_pred_train == y_train)*100))
