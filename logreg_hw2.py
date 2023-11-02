@@ -138,7 +138,7 @@ def calculateNegativeLogLikelihood(X,y,w):
 #
 #   losses -- a list of negative log-likelihood values for each iteration
 ######################################################################
-def trainLogistic(X,y, max_iters=20000, step_size=0.1):
+def trainLogistic(X,y, max_iters=20000, step_size=1):
 
 	# Initialize our weights with zeros
 	w = np.zeros( (X.shape[1],1) )
