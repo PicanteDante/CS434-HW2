@@ -33,7 +33,7 @@ def main():
 	X_train, y_train, X_test = loadData()
 
 	logging.info("\n---------------------------------------------------------------------------\n")
-	"""
+	
 	# Fit a logistic regression model on train and plot its losses
 	logging.info("Training logistic regression model (No Bias Term)")
 	w, losses = trainLogistic(X_train,y_train)
@@ -43,7 +43,7 @@ def main():
 	logging.info("Train accuracy: {:.4}%".format(np.mean(y_pred_train == y_train)*100))
 
 	logging.info("\n---------------------------------------------------------------------------\n")
-	"""
+	
 	X_train_bias = dummyAugment(X_train)
 	X_test_bias = dummyAugment(X_test)
 
@@ -55,7 +55,7 @@ def main():
 	logging.info("Learned weight vector: {}".format([np.round(a,4)[0] for a in bias_w]))
 	logging.info("Train accuracy: {:.4}%".format(np.mean(y_pred_train == y_train)*100))
 
-	"""
+	
 	plt.figure(figsize=(16,9))
 	plt.plot(range(len(losses)), losses, label="No Bias Term Added")
 	plt.plot(range(len(bias_losses)), bias_losses, label="Bias Term Added")
@@ -63,14 +63,14 @@ def main():
 	plt.xlabel("Epoch")
 	plt.ylabel("Negative Log Likelihood")
 	plt.legend()
-	plt.show()"""
+	plt.show()
 
 	logging.info("\n---------------------------------------------------------------------------\n")
-
+	"""
 	logging.info("Running cross-fold validation for bias case:")
 	
 	# Perform k-fold cross
-	"""
+	
 	for k in [2,3,4, 5, 10, 20, 50]:
 		cv_acc, cv_std = kFoldCrossVal(X_train_bias, y_train, k)
 		logging.info("{}-fold Cross Val Accuracy -- Mean (stdev): {:.4}% ({:.4}%)".format(k,cv_acc*100, cv_std*100))
@@ -160,7 +160,7 @@ def calculateNegativeLogLikelihood(X,y,w):
 #
 #   losses -- a list of negative log-likelihood values for each iteration
 ######################################################################
-def trainLogistic(X,y, max_iters=80000, step_size=0.0001):
+def trainLogistic(X,y, max_iters=2000000, step_size=0.0001):
 	# Initialize our weights with zeros
 	w = np.zeros( (X.shape[1],1) )
 
