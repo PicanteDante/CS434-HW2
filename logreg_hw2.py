@@ -87,10 +87,12 @@ def main():
 	plt.ylabel("accuracy")
 	plt.show()
 	
-	test_out = np.concatenate()
-	header = np.array([["id", "type"]])
+	test_out = np.concatenate(np.array(sizes),
+								np.array(accuracies),
+								np.array(weights))
+	header = np.array([["size", "accuracy", "weights"]])
 	test_out = np.concatenate((header, test_out))
-	np.savetxt('test_predicted.csv', test_out, fmt='%s', delimiter=',')
+	np.savetxt('bigtests.csv', test_out, fmt='%s', delimiter=',')
 
 	'''
 	plt.figure(figsize=(16,7))
