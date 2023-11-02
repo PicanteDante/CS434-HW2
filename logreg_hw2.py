@@ -1,3 +1,18 @@
+"""
+Things I changed:
+step_size = 0.0001
+max_iters = 20000
+dummy_aug = column of 1s
+
+
+
+
+
+
+"""
+
+
+
 import numpy as np
 np.random.seed(42)
 import matplotlib.pyplot as plt
@@ -18,7 +33,7 @@ def main():
 	X_train, y_train, X_test = loadData()
 
 	logging.info("\n---------------------------------------------------------------------------\n")
-
+	"""
 	# Fit a logistic regression model on train and plot its losses
 	logging.info("Training logistic regression model (No Bias Term)")
 	w, losses = trainLogistic(X_train,y_train)
@@ -28,7 +43,7 @@ def main():
 	logging.info("Train accuracy: {:.4}%".format(np.mean(y_pred_train == y_train)*100))
 
 	logging.info("\n---------------------------------------------------------------------------\n")
-
+	"""
 	X_train_bias = dummyAugment(X_train)
 	X_test_bias = dummyAugment(X_test)
 
@@ -111,11 +126,9 @@ def logistic(z):
 #   nll --  the value of the negative log-likelihood
 ######################################################################
 def calculateNegativeLogLikelihood(X,y,w):
-	# Calculate the logits
-	z = X @ w  # Matrix-vector multiplication
+	z = X @ w
 	logit_z = logistic(z)
 
-	# Calculate the negative log likelihood
 	nll = -np.sum(y * np.log(logit_z + 0.0000001) + (1 - y) * np.log(1 - logit_z + 0.0000001))
 	return nll
 
@@ -146,7 +159,7 @@ def calculateNegativeLogLikelihood(X,y,w):
 #
 #   losses -- a list of negative log-likelihood values for each iteration
 ######################################################################
-def trainLogistic(X,y, max_iters=20000, step_size=0.0001):
+def trainLogistic(X,y, max_iters=200000, step_size=0.0001):
 	# Initialize our weights with zeros
 	w = np.zeros( (X.shape[1],1) )
 
@@ -235,11 +248,7 @@ def kFoldCrossVal(X, y, k):
 
 
 def predict(X_test, w, t):
-    # Calculate the predicted probabilities
     probabilities = logistic(X_test @ w)
-    
-    # Classify data points as 0 or 1 based on a threshold (e.g., 0.5)
-    # You can adjust the threshold based on your specific problem
     predictions = (probabilities >= t).astype(int)
     
     return predictions
