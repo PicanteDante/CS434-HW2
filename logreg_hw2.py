@@ -138,7 +138,7 @@ def calculateNegativeLogLikelihood(X,y,w):
 #
 #   losses -- a list of negative log-likelihood values for each iteration
 ######################################################################
-def trainLogistic(X,y, max_iters=2000, step_size=0.0001):
+def trainLogistic(X,y, max_iters=20000, step_size=0.0001):
 
 	# Initialize our weights with zeros
 	w = np.zeros( (X.shape[1],1) )
@@ -153,19 +153,12 @@ def trainLogistic(X,y, max_iters=2000, step_size=0.0001):
 		# Todo: Compute the gradient over the dataset and store in w_grad
 		# .
 		# . Implement equation 9.
-		# .
+		# .#z = logistic(X @ w)errors = z - yw_grad = np.dot(X.T, errors)
 		
-		for j in range(X.shape[0]):
-			# Calculate the predicted probability
-			p = sigmoid(np.dot(X[j], w))
-			# Calculate the gradient for this example
-			w_grad += X[j].reshape(-1, 1) * (p - y[j])
-
+		w_grad = np.dot(X.T, (logistic(X @ w) - y))
+		
 		# This is here to make sure your gradient is the right shape
 		assert(w_grad.shape == (X.shape[1],1))
-
-		
-		
 		
 		# Take the update step in gradient descent
 		w = w - step_size*w_grad
