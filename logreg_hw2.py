@@ -61,7 +61,7 @@ def main():
 		lossess.append(bias_losses)
 		accuracies.append(np.mean(y_pred_train == y_train)*100)
 		
-		print("StepSize: {:.4f}\tAccuracy: {:.4f}%\tWeights: {}".format(ss, accuracies[i], bias_w))
+		print("StepSize: {:.4f}\tAccuracy: {:.5f}%\tWeights: {}".format(ss, accuracies[i], bias_w))
 		
 		#logging.info("Learned weight vector: {}".format([np.round(a,4)[0] for a in bias_w]))
 		#logging.info("Train accuracy: {:.4}%".format(np.mean(y_pred_train == y_train)*100))
