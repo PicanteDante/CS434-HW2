@@ -68,7 +68,7 @@ def main():
 
 	logging.info(bias_losses[len(bias_losses) - 1])
 
-	
+	'''
 	plt.figure(figsize=(16,7))
 	plt.plot(range(len(losses)), losses, label="No Bias Term Added")
 	plt.plot(range(len(bias_losses)), bias_losses, label="Bias Term Added")
@@ -77,18 +77,18 @@ def main():
 	plt.xlabel("Epoch")
 	plt.ylabel("Negative Log Likelihood")
 	plt.legend()
-	plt.show()
+	plt.show()'''
 
 	logging.info("\n---------------------------------------------------------------------------\n")
 	
 	logging.info("Running cross-fold validation for bias case:")
 	
 	# Perform k-fold cross
-	'''
+	
 	for k in [2,3,4, 5, 10, 20, 50]:
 		cv_acc, cv_std = kFoldCrossVal(X_train_bias, y_train, k)
 		logging.info("{}-fold Cross Val Accuracy -- Mean (stdev): {:.4}% ({:.4}%)".format(k,cv_acc*100, cv_std*100))
-	'''
+	
 	####################################################
 	# Write the code to make your test submission here
 	####################################################
@@ -144,9 +144,10 @@ def calculateNegativeLogLikelihood(X,y,w):
 	z = X @ w
 	logit_z = logistic(z)
 	
-	sse = np.sum((y - logit_z) ** 2)
-	#nll = -np.sum(y * np.log(logit_z + 0.0000001) + (1 - y) * np.log(1 - logit_z + 0.0000001))
-	return sse
+	#sse = np.sum((y - logit_z) ** 2)
+	#sae = np.sum(np.abs(y - logit_z))
+	nll = -np.sum(y * np.log(logit_z + 0.0000001) + (1 - y) * np.log(1 - logit_z + 0.0000001))
+	return nll
 
 
 
@@ -175,7 +176,7 @@ def calculateNegativeLogLikelihood(X,y,w):
 #
 #   losses -- a list of negative log-likelihood values for each iteration
 ######################################################################
-def trainLogistic(X,y, max_iters=20000, step_size=0.002):
+def trainLogistic(X,y, max_iters=15000, step_size=0.00225):
 	# Initialize our weights with zeros
 	w = np.zeros( (X.shape[1],1) )
 
