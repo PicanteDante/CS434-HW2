@@ -108,7 +108,7 @@ def calculateNegativeLogLikelihood(X,y,w):
 	logit_z = logistic(z)
 
 	# Calculate the negative log likelihood
-	nll = -np.sum(y * np.log(logit_z) + (1 - y) * np.log(1 - logit_z))
+	nll = -np.sum(y * np.log(logit_z + 0.0000001) + (1 - y) * np.log(1 - logit_z + 0.0000001))
 	return nll
 
 
@@ -138,7 +138,7 @@ def calculateNegativeLogLikelihood(X,y,w):
 #
 #   losses -- a list of negative log-likelihood values for each iteration
 ######################################################################
-def trainLogistic(X,y, max_iters=20000, step_size=0.0001):
+def trainLogistic(X,y, max_iters=20000, step_size=0.01):
 
 	# Initialize our weights with zeros
 	w = np.zeros( (X.shape[1],1) )
